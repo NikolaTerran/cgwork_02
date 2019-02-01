@@ -34,3 +34,6 @@ octants
 2. x0 + 1, y0
 
 test midpoint: (x0 + 1, y0 + 1/2)
+if above, option 1
+if below, option 2
+if middle, alternate
