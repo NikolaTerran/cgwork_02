@@ -5,6 +5,10 @@
 #include <fcntl.h>
 #include "line.h"
 
+void db(int a){
+	printf("lol:%d\n",a);
+}
+
 int* sys_random(int size){
 	int *buffer;
 	buffer = malloc(sizeof(int) * size );
@@ -19,10 +23,10 @@ int* sys_random(int size){
 	return buffer;
 }
 
-void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, int y3, int octants, int * color, int m){
+void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, int y3, int octants, int color[], double m){
 	
 	double slope;
-	
+	db(1);
 	while(x3 != x2 && y3 != y2){
 		switch(octants){
 			case 1: slope = (y3 - y1)/(x3 - x1);
@@ -56,10 +60,14 @@ void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, in
 	}
 }
 
-int drawLine(int array[][500][3], int x1 , int y1, int x2, int y2, int * color){
+int drawLine(int array[][500][3], int x1 , int y1, int x2, int y2, int color[]){
 	int octants;
 	
-	double m = (y1 - y2) / (x2 - x1);
+	if(x2 == x1)
+	{double m = 1;}
+	else{
+		double m = (y1 - y2) / (x2 - x1);
+	}
 	
 	if(y2 < y1){
 		if(x2 > x1){
@@ -96,8 +104,6 @@ int drawLine(int array[][500][3], int x1 , int y1, int x2, int y2, int * color){
 	array[x1][y1][2] = color[2];
 	switch(octants){
 			case 1: line_helper(array,x1,y1,x2,y2,x1 + 1,y1 + 1,octants,color,m);
-					 
-			//right up
 			break;
 			case 2: //up right
 			break;
@@ -116,7 +122,7 @@ int drawLine(int array[][500][3], int x1 , int y1, int x2, int y2, int * color){
 			}
 }
 
-void initialize(int array[][500][3]){
+void initialize(int array[][500][3], int color[]){
 
 	//char line[20];
 	int i, j;
@@ -126,15 +132,12 @@ void initialize(int array[][500][3]){
 	
 	for(i=0; i < 500; i ++){
 		for(j=0; j < 500; j++){
-			printf("ran\n");
-			array[i][j][0] = 255;
-			array[i][j][1] = 0;
-			array[i][j][2] = 0;
+			array[i][j][0] = color[0];
+			array[i][j][1] = color[1];
+			array[i][j][2] = color[2];
 		}		 
 	}
 }
-
-
 
 void push(int array[][500][3],int file){
 	char line[20];
@@ -143,7 +146,6 @@ void push(int array[][500][3],int file){
 	snprintf(line, sizeof(line), "P3 500 500 255\n");
 	write (file, line, strlen(line));
 	for(i=0; i < 500; i ++){
-	printf("i:%d\n",i);
 			for(j=0; j < 500; j++){
 				snprintf(line, sizeof(line), "%d %d %d\n", array[i][j][0], array[i][j][1], array[i][j][2]);
 				write(file, line, strlen(line));
@@ -161,12 +163,22 @@ rgb[1] = 255;
 rgb[2] = 255;
 
 int array[500][500][3];
-//array = malloc(sizeof(int) * 500 * 500 * 3);
 
 fd = open("image.ppm", O_CREAT | O_TRUNC | O_WRONLY, 0644);
-printf("ran\n");
-initialize(array);
-printf("ran\n");
+
+//initialize 
+
+initialize(array,rgb);
+
+//do stuff
+
+//make line green
+rgb[0] = 0;
+rgb[1] = 255;
+rgb[2] = 0;
+
+drawLine(array, 250, 250, 250, 250, rgb);
+
 push(array,fd);
 
 }
