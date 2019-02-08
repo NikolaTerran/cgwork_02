@@ -80,7 +80,7 @@ void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, in
 						array[y3][x3][0] = color[0];
 						array[y3][x3][1] = color[1];
 						array[y3][x3][2] = color[2];
-						//x3 --;
+						x3 --;
 						y3 --;
 					}else{
 						db("slope",slope);
@@ -89,7 +89,7 @@ void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, in
 						array[y3][x3][0] = color[0];
 						array[y3][x3][1] = color[1];
 						array[y3][x3][2] = color[2];
-						x3 --;
+						//x3 --;
 						y3 --;
 					}
 			break;
