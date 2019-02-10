@@ -3,7 +3,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <time.h>
 #include "line.h"
+
 
 void db(char * say,double a){
 	printf("%s:%f\n",say,a);
@@ -94,14 +96,106 @@ void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, in
 					}
 			break;
 			case 4: //left up
+					if(slope < m){
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						
+						x3 --;
+					}else{
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						y3 --;
+						x3 --;
+					}
 			break;
 			case 5: //left down
+					if(slope > m){
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						x3 --;
+					}else{
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						x3 --;
+						y3 ++;
+					}
 			break;
 			case 6: //down left
+					if(slope < m){
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						y3 ++;
+					}else{
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						x3 --;
+						y3 ++;
+					}
 			break;
 			case 7: //down right
+					if(slope > m){
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						y3 ++;
+						
+					}else{
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						x3 ++;
+						y3 ++;
+					}
 			break;
 			case 8: //right down
+					if(slope < m){
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						x3 ++;
+					}else{
+						db("slope",slope);
+						//db("y3",y3);
+						//db("x3",x3);
+						array[y3][x3][0] = color[0];
+						array[y3][x3][1] = color[1];
+						array[y3][x3][2] = color[2];
+						x3 ++;
+						y3 ++;
+					}
 			break;
 		}
 	}
@@ -154,6 +248,7 @@ int drawLine(int array[][500][3], int x1 , int y1, int x2, int y2, int color[]){
 				array[y1][x1][0] = color[0];
 				array[y1][x1][1] = color[1];
 				array[y1][x1][2] = color[2];
+				db("lol",(double)octants);
 				switch(octants){
 						case 1: line_helper(array,x1,y1,x2,y2,x1 + 1,y1 - 1,octants,color,m);
 						break;
@@ -161,15 +256,15 @@ int drawLine(int array[][500][3], int x1 , int y1, int x2, int y2, int color[]){
 						break;
 						case 3: line_helper(array,x1,y1,x2,y2,x1 - 1,y1 - 1,octants,color,m);
 						break;
-						case 4: //left up
+						case 4: line_helper(array,x1,y1,x2,y2,x1 - 1,y1 - 1,octants,color,m);//left up
 						break;
-						case 5: //left down
+						case 5: line_helper(array,x1,y1,x2,y2,x1 - 1,y1 + 1,octants,color,m);//left down
 						break;
-						case 6: //down left
+						case 6: line_helper(array,x1,y1,x2,y2,x1 - 1,y1 + 1,octants,color,m);//down left
 						break;
-						case 7: //down right
+						case 7: line_helper(array,x1,y1,x2,y2,x1 + 1,y1 + 1,octants,color,m);//down right
 						break;
-						case 8:// right down
+						case 8: line_helper(array,x1,y1,x2,y2,x1 + 1,y1 + 1,octants,color,m);// right down
 						break;
 						}
 	}
@@ -229,16 +324,45 @@ initialize(array,rgb);
 rgb[0] = 255;
 rgb[1] = 0;
 rgb[2] = 0;
+/*
+int size = 400;
+int * buffer = sys_random(size);
 
-//drawLine(array, 100, 100, 400, 50, rgb);
-//drawLine(array, 50, 100, 100, 50, rgb);
-//drawLine(array, 200, 300, 250, 30, rgb);
-//drawLine(array, 200, 100, 200, 0, rgb);
-drawLine(array, 250, 250, 50, 50, rgb);
-drawLine(array, 250, 250, 200, 30, rgb);
-//drawLine(array, 100, 100, 400, 50, rgb);
-//drawLine(array, 100, 100, 50, 50, rgb);
-//drawLine(array, 100, 100, 100, 50, rgb);
+i = 0;
+while(i < 700){
+	int x_1 = buffer[i] % 500;
+	i++;
+	int y_1 = buffer[i] % 500;
+	i++;
+	int x_2 = buffer[i] % 500;
+	i++;
+	int y_2 = buffer[i] % 500;
+	i++;
+	/*
+	rgb[0] = buffer[i] % 255;
+	i++;
+	rgb[0] = buffer[i] % 255;
+	i++;
+	rgb[0] = buffer[i] % 255;
+	i++;
+	*//*
+	drawLine(array, x_1 , y_1, x_2, y_2, rgb);
+}*/
+
+srand(time(NULL));
+i = 0;
+while(i < 100){
+int x_1 = rand() % 500;
+int y_1 = rand() % 500;
+int x_2 = rand() % 500;
+int y_2 = rand() % 500;
+rgb[0] = rand() % 255;
+rgb[1] = rand() % 255;
+rgb[2] = rand() % 255;
+
+drawLine(array, x_1, y_1, x_2, y_2, rgb);
+i++;
+}
 
 push(array,fd);
 
